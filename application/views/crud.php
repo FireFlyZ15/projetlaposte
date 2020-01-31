@@ -95,6 +95,21 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
                         </tr>
                     </tfoot>
                 </table>
+                <div id="datacreate" style="display: none">
+                    <div id="title">
+                        <h2>Créer une nouvelle données</h2>
+                    </div>
+                    <div>
+                        <?php 
+                        $keys = array_keys(get_object_vars($test[0]));
+                        foreach($keys as $key){
+                            if($key == "id") continue;
+                            echo $key."<input type='text' data-id='".$key."' data-field='".$key."' id='".$key."'>";
+                            echo "</br>";
+                        }
+                        ?>
+                    </div>
+                </div>
             </div>
             <?=generate_modal("error_modal","Erreur")?>
             <h4>Filtres utilisés</h4>
@@ -192,6 +207,21 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
             }
         });
         var create = document.getElementById("create");
+        
+        create.onclick = function(){
+            var datacreate = document.getElementById('datacreate');
+            var title = document.getElementById('title');
+            title.style.background = "#c6c4c4";
+            title.style.marginTop = "0";
+            title.style.paddingBottom = "10px";
+            title.style.paddingTop = "10px";
+            datacreate.style.border = "solid";
+            if(datacreate.style.display == "block"){
+                datacreate.style.display = "none";
+            }else{
+                datacreate.style.display = "block";
+            }
+        }
         
         //Delete data
         var Bdelete = document.getElementById("idDelete");
