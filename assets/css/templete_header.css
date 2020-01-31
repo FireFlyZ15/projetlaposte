@@ -1,0 +1,276 @@
+header{
+	background: #3D3D3D;
+	padding: 5px;
+	//margin : 5px;
+}
+.centpersent{
+	width: 100%;
+}
+.white{
+	color: white;
+}
+.white a{
+	color: white;
+}
+a.titre{
+	color: white;
+	text-decoration: none;
+
+}
+.login{
+	display: inline-block;
+	vertical-align: top;
+	position: absolute;
+    right: 0px;
+    margin-right: 20px;
+    color: white;
+	text-decoration: none;
+	outline: none;
+}
+.loginA{
+	color: white;
+}
+h1{
+	outline: none;
+	display: inline-block;
+	margin-top :5px;
+	margin-bottom :10px;
+}
+
+h1 a.titre:hover, a.titre:focus {
+
+    text-decoration: none;
+    outline: none;
+    text-shadow: 0px 0px 15px #fff;
+}
+body { 
+ 	background: #F5F5F5; 
+}
+
+.contenuG{
+	background: white;
+	display: inline-block;
+	width: 1400px;
+	height: 800px;
+	margin: 0px 2px 0px 5px;
+	min-width: 300px;
+}
+
+.contenuD{
+	background: white;
+	display: inline-block;
+	vertical-align: top;
+	width: 20%;
+	margin: 0px 0px 5px 2px;
+	min-width: 300px;
+}
+#colormanager{
+	text-align: left;
+	margin-right: 5px;
+}
+.subcontant{
+	margin : 5px;
+	border-style: solid;
+	border-color: #CCCCCC;
+	border-width: 2px;
+	padding : 5px;
+	text-align: center;
+}
+.nav-pills a{color:white;}
+.nav-pills a:hover{color:black;}
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{
+	background-color:white;
+	color:black;
+}
+.cG{
+    display: inline-block;
+    width: auto;
+    margin: 0px 2px 0px 5px;
+}
+
+.cD{
+    display: inline-block;
+    vertical-align: top;
+    width: 5px;
+    margin: 0px 0px 5px 2px;
+}
+.filterBox {
+	width: auto;
+	/*height: 140px;*/
+	background-color: #FaFaFa;
+	margin: 5px;
+	padding: 5px;
+}
+.filterBoxChoice{
+	overflow-y:auto;
+	width: 100%;
+	/*height: 75px;*/
+}
+.filtersBox{
+	width: 100%;
+	height: 150px;
+	min-height: 150px;
+	background-color: #F3F3F3;
+	overflow-x: hidden;
+	overflow-y:scroll;
+	white-space: nowrap;
+
+}
+.removeButton{
+	width: 10px;
+	height: 10px;
+	margin-right:5px;
+	vertical-align: center;
+	cursor: pointer;
+}
+
+.tooltip {
+	visibility: visible;
+	opacity: 1;
+	width: auto;
+	background-color: rgba(85,85,85, 0.8);
+	color: #fff;
+	text-align: left;
+	border-radius: 6px;
+	padding: 5px;
+	position:fixed;
+	z-index: 1;
+}
+.center{
+	text-align: center;
+}
+.right{
+	text-align: right;
+}
+
+.right-float{
+	float: right;
+}
+
+.padding-loginfo{
+	padding-top:10px;
+	padding-right: 25px;
+}
+.not-active {
+	pointer-events: none;
+	cursor: default;
+    color: lightgray;
+}
+
+.bg{
+	background: white;
+    padding: 10px;
+}
+
+.row{
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+#colormanager {
+	overflow-y:auto;
+	max-height: 75px;
+}
+
+.h500 {
+	height: 475px;
+}
+
+.selectchoice{
+	width: 100%;
+}
+
+.selectFilter{
+	width: 80% !important;
+}
+.selectFilterButton{
+	width: 15% !important;
+}
+.selectConfig{
+	width: 100% !important;
+}
+.selectConfig25{
+	width: 32% !important;
+}
+.selectConfig75{
+	width: 68% !important;
+}
+/*Suppression des points de la liste des filtres*/
+.ulHide{
+	list-style-type: none;
+}
+.canvas-overflow{
+	overflow-x:auto;
+	max-width: 100%;
+}
+.table-overflow{
+	overflow-x:auto;
+	max-width: 100%;
+	overflow-y:auto;
+	max-height: 700px;
+}
+
+.thumbnail_picture{
+	height: 100px !important;
+	width: auto !important;
+}
+
+.caption{
+	text-decoration:none;
+}
+.resizeH {
+	resize: horizontal;
+	overflow: auto;
+}
+.resizeV {
+	 resize: vertical;
+	 overflow: auto;
+ }
+.itemGraph:link{
+	text-decoration:none;
+}
+
+.showcsv{
+	overflow-x:auto;
+	max-width: 100%;
+	overflow-y:auto;
+	max-height: 700px;
+	white-space:pre-wrap;
+	background: #2B2B2B;
+	color: #A9B7C6;
+}
+
+.textareaRight{
+	width: 100% !important;
+}
+
+#resizableLeft { padding: 0.5em; height: 100% !important; min-width: 16.66666667%; max-width: 49%}
+#resizableRight { min-width: 50%; max-width: 83.33333333%;}
+.ui-resizable-helper { border: 1px dotted gray; }
+
+
+.databaseShow{
+	margin-left: 20px;
+}
+
+#iframe_error_modal_body{
+	width: 100%;
+	height: 400px;
+	border-width: 0px;
+}
+
+
+.wordwrap_label{
+	word-wrap: break-word;
+	width: 80%;
+	vertical-align: text-top;
+}
+
+.hundredpercentwitdh{
+	width: 100%;
+}
+
+.overflow500 {
+    overflow-y: auto;
+    max-height: 500px;
+}
