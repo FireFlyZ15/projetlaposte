@@ -6,6 +6,12 @@ $logo_properties = array(
     'width' => '75',
     'height'=> '56',
 );
+$logo_metrologie = array(
+    'src'   => 'assets/img/picto_BEAmetrologie_avec contour_reparation.png',
+    'class' => 'post_images',
+    'width' => '75',
+    'height'=> '56',
+);
 $data_form = array(
     'class'         => 'form-inline'
 );
@@ -61,9 +67,18 @@ $myaccount_button = array(
     </head>
     <header>
         <div class="row">
+            <?php echo $user->actual_source; ?>
+            <?php if ($user->actual_source != "ds_5e281d009493e6.10541606"){?>
             <div class="col-md-8 left white"><h1><a href="<?php echo base_url(); ?>"
-                                                    class="titre"><?php echo img($logo_properties); ?><?= PROJECT_NAME ?></a>
-                </h1><?= VERSION . " " . ENVIRONEMENT ?></div>
+                                                    class="titre"><?php echo img($logo_properties); ?><?= PROJECT_NAME_360 ?></a>
+                </h1><?= VERSION . " " . ENVIRONEMENT ?>
+            </div>
+            <?php }else{ ?>
+            <div class="col-md-8 left white"><h1><a href="<?php echo base_url(); ?>"
+                                                    class="titre"><?php echo img($logo_metrologie); ?><?= PROJECT_NAME_Metro ?></a>
+                </h1><?= VERSION . " " . ENVIRONEMENT ?>
+            </div>
+            <?php } ?>
             <div class="col-md-4 right padding-loginfo">
                 <?php if(!$this->session->has_userdata('logged_in')):?>
                     <?=form_button($connexion_button).form_button($register_button)?>
@@ -78,14 +93,15 @@ $myaccount_button = array(
                     </div>
                 <?php endif;?>
             </div>
-
         </div>
         <?php if (isset($errormsg) && $errormsg != ""): ?>
             <div class="alert alert-warning"><?= $errormsg ?></div>
         <?php endif; ?>
         <?php if($this->session->has_userdata('logged_in')){?>
+        <?php if ($user->actual_source != "ds_5e281d009493e6.10541606"){?>
         <ul class="nav nav-pills nav-justified white">
                 <li role="presentation" <?php if($type=="list"){echo 'class="active"';}?>><a href="<?php echo site_url('graph/');?>">Listes des graphes</a></li>
+            <li role="presentation" <?php if($type=="consult"){echo 'class="active"';}?>><a href="<?php echo site_url('consultation/');?>">Consultation des données</a></li>
                 <?php if($user != null && ($user->type=="admin" || $user->type=="createur")) :?>
                     <li role="presentation" <?php if($type=="histogram"){echo 'class="active"';}?>><a href="<?php echo site_url('graph/histogram_generator/');?>">Générateur Histogramme</a></li>
                     <li role="presentation" <?php if($type=="pie"){echo 'class="active"';}?>><a href="<?php echo site_url('graph/pie_generator/');?>">Générateur Diagramme circulaire</a></li>
@@ -102,21 +118,14 @@ $myaccount_button = array(
                     <li role="presentation" <?php if($type=="admin"){echo 'class="active"';}?>><a href="<?php echo site_url('user/admin/');?>">Administration</a></li>
                 <?php endif; ?>
         </ul>
-        <!--<div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Menu déroulant
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#" title="Lien 1">Lien 1</a></li>
-                    <li><a href="#" title="Lien 2">Lien 2</a></li>
-                    <li><a href="#" title="Lien 3">Lien 3</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#" title="Lien 4">Lien 4</a></li>
-                </ul>
-            </div> -->
-            <?php
-                }
-        ?>
+            <?php }else{ ?>
+        <ul class="nav nav-pills nav-justified white">
+                <li role="presentation" <?php if($type=="list"){echo 'class="active"';}?>><a href="<?php echo site_url('crud/ajout');?>">Ajout d'une nouvelle données</a></li>
+                <li role="presentation" <?php if($type=="list"){echo 'class="active"';}?>><a href="<?php echo site_url('crud/modifsuppr');?>">Modifications/Suppression d'une données</a></li>
+                <li role="presentation" <?php if($type=="list"){echo 'class="active"';}?>><a href="<?php echo site_url('crud/consultation');?>">Consultations des données</a></li>
+                <?php if($user != null && ($user->type=="admin" || $user->type=="createur")) :?>
+                <?php endif; ?>
+        </ul>
+        <?php }} ?>
         <div class="login"></div>
     </header>

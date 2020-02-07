@@ -77,13 +77,6 @@ $data_form_password_verification = array(
         <h3>Description des données disponible</h3>
         <p><?=$descriptiondatabase?></p>
     </div>
-    <?php if($user->actual_database == "projetlaposte"){
-        echo "la base de données est projet la poste";
-        echo $user->actual_table;
-    }else if($user->actual_database == "hadoopviewer"){
-        echo "la base de données est hadoopviewer";
-    } 
-    ?>
 </div>
 <?php endif;?>
 <script type='text/javascript' src="<?= base_url() ?>assets/js/formcheck.js"></script>

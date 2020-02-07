@@ -24,6 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'http://10.0.2.15:360/360/';
+$config['accueil_url'] = 'http://10.0.2.15:360/';
+$config['metro_url'] = 'http://10.0.2.15:360/metrologie/';
 
 /*
 |--------------------------------------------------------------------------

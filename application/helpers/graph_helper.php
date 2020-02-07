@@ -217,6 +217,22 @@ if ( ! function_exists('generate_form_filters')){
 
         return $form;
     }
+    
+    function generate_form_filters2($resultColumn) {
+        $form = "<div class=\"form-inline form-group\"><label for=\"filters\">".FILTER_CHOICE_LABEL."</label><br/><SELECT id=\"filters\" name=\"filters\" class=\"form-control selectFilter\">";
+         foreach ($resultColumn as $rowColumn){
+             if ($rowColumn->type == "timestamp" || $rowColumn->type == "datetime" || $rowColumn->type == "date") {
+                 $form .= "<OPTION value='$rowColumn->name::DATE'> $rowColumn->name";
+             } else if ($rowColumn->type == "smallint" && $rowColumn->type == "int" && $rowColumn->type == "bigint" && $rowColumn->type == "double") {
+                 $form .= "<OPTION value='$rowColumn->name'> $rowColumn->name";
+             }else{
+                 $form .= "<OPTION value='$rowColumn->name'> $rowColumn->name";
+             }
+         }
+        $form .= "</SELECT><button type=\"button\" onclick='addFilter(configGraph.source, configGraph.database, configGraph.table)' class=\"btn btn-default\"><span id=\"addFiltersButton\" class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"/></button></div><div id=\"filtersBox\" class=\"filtersBox resizeV\"></div><div id=\"filtersBoxselected\"><ul id=\"data\"></ul></div>";
+
+        return $form;
+    }
 }
 
 if ( ! function_exists('generate_form_add_speed_filters')){

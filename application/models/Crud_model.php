@@ -23,4 +23,9 @@ class Crud_model extends CI_Model{
         $this->db->where('id', $id);
         $this->db->update($table, $data);
     }
+    
+    function Create($db, $table, $data){
+        $this->db->db_select($db);
+        $this->db->insert($table, $data);
+    }
 }
