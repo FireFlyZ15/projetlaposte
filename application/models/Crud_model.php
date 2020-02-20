@@ -24,6 +24,24 @@ class Crud_model extends CI_Model{
         $this->db->update($table, $data);
     }
     
+    function UpdateBalance($codeActif, $date, $codeRegate, $statutBalance, $db, $table, $idEntiteFromEntite, $idEntiteFromBalance){
+        $id = "";
+        if($idEntiteFromEntite != $idEntiteFromBalance){
+            $id = $idEntiteFromEntite;
+        }else{
+            $id = $idEntiteFromBalance;
+        }
+        $data = array(
+            'dateVerification' => $date,
+            'codeRegate' => $codeRegate,
+            'statutVerification' => $statutBalance,
+            'idEntite' => $id
+        );
+        $this->db->db_select($db);
+        $this->db->where('codeActif', $codeActif);
+        $this->db->update($table, $data);
+    }
+    
     function Create($db, $table, $data){
         $this->db->db_select($db);
         $this->db->insert($table, $data);

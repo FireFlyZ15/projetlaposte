@@ -20,11 +20,11 @@ class Prestataire_model extends CI_Model
         return $db->select("libelle")->distinct()->from($database.".".$table)->get()->result();
     }
     
-    public function getIdPrestataire($db, $database, $table, $libelle)
+    public function getIdPrestataire($db, $database, $table, $codeRegate)
     {
         $this->db->select("id");
         $this->db->from($database.".".$table);
-        $this->db->where('libelle', $libelle);
+        $this->db->where('libelle', $codeRegate);
         return $this->db->get()->result();
     }
 }
