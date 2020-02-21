@@ -56,6 +56,7 @@
     <h2>Configurations</h2>
     <div class="list-group">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <?php if($user->actual_database != "projetlaposte"){ ?>
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
                     <h4 class="panel-title">
@@ -93,6 +94,8 @@
                     </div>
                 </div>
             </div>
+            <?php }else{ ?>
+            <?php } ?>
 
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingThree">
@@ -218,10 +221,6 @@
                 <div id="collapseDataAuthorized" class="panel-collapse collapse" role="tabpanel"
                      aria-labelledby="headingDataAuthorized">
                     <div class="panel-body">
-                        <button id="dataAuthorizedButtonModif" class="btn btn-default btn-info"
-                                title="Rafraichir les informations" onclick="getlistAuthorizedData()"><span
-                                    class="glyphicon glyphicon-refresh"></span></button>
-                        <span id="lastDateUpdateDataAuthorized"></span>
                         <?php foreach ($listDatabase as $row): ?>
                             <?= form_open('user/modify_authorized/' . $row->id) ?>
                             <h4><?= $row->name ?> <em>(<?= $row->engine ?>
@@ -245,11 +244,101 @@
                     </div>
                 </div>
             </div>
-
+            
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingDataManagement">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#dataManagement"
+                           aria-expanded="false" aria-controls="dataManagement">
+                            Gestion des données de la base de données
+                        </a>
+                    </h4>
+                </div>
+                <div id="dataManagement" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingDataManagement">
+                    <div class="panel-body">
+                        <div>
+                            <h4>Récupération des données de la base de données en Excel</h4>
+                        <button class="btn btn-info btn-sm"
+                                onclick="location.href = '<?= site_url("user/exportAllBalance") ?>'">Recupération des données des balances en Excel
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                onclick="location.href = '<?= site_url("user/exportAllEntite") ?>'">Recupération des données des entites en Excel
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                onclick="location.href = '<?= site_url("user/exportAllPrestataire") ?>'">Recupération des données des prestataires en Excel
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                onclick="location.href = '<?= site_url("user/exportAllLot") ?>'">Recupération des données des lots en Excel
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                onclick="location.href = '<?= site_url("user/exportAllVerification") ?>'">Recupération des données des verifications en Excel
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                onclick="location.href = '<?= site_url("user/exportAllPrixDeplacement") ?>'">Recupération des données des Prix de Deplacement en Excel
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                onclick="location.href = '<?= site_url("user/exportAllPrixVerification") ?>'">Recupération des données des Prix de Verification en Excel
+                        </button>
+                        <button class="btn btn-info btn-sm"
+                                onclick="location.href = '<?= site_url("user/exportAllModele") ?>'">Recupération des données des Modeles de balances en Excel
+                        </button>
+                        </div>
+                        <div>
+                            <h4>Suppression des données par tables de la base de données</h4>
+                            <button class="btn btn-warning btn-sm"
+                                onclick="location.href = '<?= site_url("user/deleteAllBalance") ?>'">Suppression des données des balances
+                        </button>
+                        <button class="btn btn-warning btn-sm"
+                                onclick="location.href = '<?= site_url("user/deleteAllEntite") ?>'">Suppression des données des entites
+                        </button>
+                        <button class="btn btn-warning btn-sm"
+                                onclick="location.href = '<?= site_url("user/deleteAllPrestataire") ?>'">Suppression des données des prestataires
+                        </button>
+                        <button class="btn btn-warning btn-sm"
+                                onclick="location.href = '<?= site_url("user/deleteAllLot") ?>'">Suppression des données des lots en Excel
+                        </button>
+                        <button class="btn btn-warning btn-sm"
+                                onclick="location.href = '<?= site_url("user/deleteAllVerification") ?>'">Suppression des données des verifications
+                        </button>
+                        <button class="btn btn-warning btn-sm"
+                                onclick="location.href = '<?= site_url("user/deleteAllPrixDeplacement") ?>'">Suppression des données des Prix de Deplacement
+                        </button>
+                        <button class="btn btn-warning btn-sm"
+                                onclick="location.href = '<?= site_url("user/deleteAllPrixVerification") ?>'">Suppression des données des Prix de Verification
+                        </button>
+                        <button class="btn btn-warning btn-sm"
+                                onclick="location.href = '<?= site_url("user/deleteAllModele") ?>'">Suppression des données des Modeles de balances
+                        </button>
+                        </div>
+                        <div>
+                            <h4>Suppression des données de toutes les données de la base de données</h4>
+                        <button class="btn btn-danger btn-sm" id="delete">Suppression des données de la base de données
+                        </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingVueManagement">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#vueManagement"
+                           aria-expanded="false" aria-controls="vueManagement">
+                            Génération des vues
+                        </a>
+                    </h4>
+                </div>
+                <div id="vueManagement" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingVueManagement">
+                    <div class="panel-body">
+                        <button class="btn btn-info btn-sm" onclick="location.href = '<?= site_url("user/vuegenerationcommande") ?>'">Génération de la commande</button>
+                        <button class="btn btn-info btn-sm" onclick="location.href = '<?= site_url("user/vuegeneration") ?>'">Génération des autres vues</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?=base_url()?>assets/js/jquery-3.4.1.min.js"></script>
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/graph.js"></script>
 <script type='text/javascript' src="<?= base_url() ?>assets/js/admin.js"></script>
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/bootstrap.min.js"></script>
@@ -258,4 +347,20 @@
     //Generation des données pour la rubrique Gestion des données autorisées
     getlistAuthorizedData();
     generateDefaultChoiceForm('<?=$default_source?>', '<?=$default_database?>', '<?=$default_table?>');
+    
+    var deleteButton = document.getElementById('delete');
+    deleteButton.onclick = function(){
+        if(confirm('Etes vous sur de vouloir supprimer toutes les données de la base de données ?'))
+            {
+                $.ajax({
+                    url: '<?= base_url() ?>index.php/user/deleteAllData',
+                    success: function(response){
+                        console.log(response);
+                    },
+                    fail: function(response){
+                        console.log(response);
+                    }
+                });
+            }
+    }
 </script>

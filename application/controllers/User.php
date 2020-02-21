@@ -1277,29 +1277,42 @@ class User extends CI_Controller
         
         $db = $this->DataV2_model->loadDatabase($data_view['source']->url);
         $this->db->db_select('projetlaposte');
-        $tables = $this->db->list_tables();
         
         $this->db->query('SET foreign_key_checks = 0');
         $this->db->query('ALTER TABLE projetlaposte.verification AUTO_INCREMENT = 0');
-        $this->db->query('ALTER TABLE projetlaposte.prixdeplacement AUTO_INCREMENT = 0');
-        $this->db->query('ALTER TABLE projetlaposte.prixverification AUTO_INCREMENT = 0');
-        $this->db->query('ALTER TABLE projetlaposte.balance AUTO_INCREMENT = 0');
-        $this->db->query('ALTER TABLE projetlaposte.modele AUTO_INCREMENT = 0');
-        $this->db->query('ALTER TABLE projetlaposte.entite AUTO_INCREMENT = 0');
-        $this->db->query('ALTER TABLE projetlaposte.prestataire AUTO_INCREMENT = 0');
-        $this->db->query('ALTER TABLE projetlaposte.lot AUTO_INCREMENT = 0');
         $this->db->query('DELETE FROM projetlaposte.verification');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        $this->db->query('SET foreign_key_checks = 0');
+        $this->db->query('ALTER TABLE projetlaposte.prixdeplacement AUTO_INCREMENT = 0');
         $this->db->query('DELETE FROM projetlaposte.prixdeplacement');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        $this->db->query('ALTER TABLE projetlaposte.prixverification AUTO_INCREMENT = 0');
         $this->db->query('DELETE FROM projetlaposte.prixverification');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        $this->db->query('ALTER TABLE projetlaposte.balance AUTO_INCREMENT = 0');
         $this->db->query('DELETE FROM projetlaposte.balance');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        $this->db->query('ALTER TABLE projetlaposte.modele AUTO_INCREMENT = 0');
         $this->db->query('DELETE FROM projetlaposte.modele');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        $this->db->query('ALTER TABLE projetlaposte.entite AUTO_INCREMENT = 0');
         $this->db->query('DELETE FROM projetlaposte.entite');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        $this->db->query('ALTER TABLE projetlaposte.prestataire AUTO_INCREMENT = 0');
         $this->db->query('DELETE FROM projetlaposte.prestataire');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
+        $this->db->query('SET FOREIGN_KEY_CHECKS = 0');
+        $this->db->query('ALTER TABLE projetlaposte.lot AUTO_INCREMENT = 0');
         $this->db->query('DELETE FROM projetlaposte.lot');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function deleteAllBalance()
@@ -1331,8 +1344,8 @@ class User extends CI_Controller
         $this->db->query('DELETE FROM projetlaposte.balance');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function deleteAllEntite()
@@ -1364,8 +1377,8 @@ class User extends CI_Controller
         $this->db->query('DELETE FROM projetlaposte.entite');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function deleteAllPrestataire()
@@ -1397,8 +1410,8 @@ class User extends CI_Controller
         $this->db->query('DELETE FROM projetlaposte.prestataire');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function deleteAllLot()
@@ -1430,8 +1443,8 @@ class User extends CI_Controller
         $this->db->query('DELETE FROM projetlaposte.lot');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function deleteAllModele()
@@ -1463,8 +1476,8 @@ class User extends CI_Controller
         $this->db->query('DELETE FROM projetlaposte.modele');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function deleteAllVerification()
@@ -1496,8 +1509,8 @@ class User extends CI_Controller
         $this->db->query('DELETE FROM projetlaposte.verification');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function deleteAllPrixDeplacement()
@@ -1529,8 +1542,8 @@ class User extends CI_Controller
         $this->db->query('DELETE FROM projetlaposte.prixdeplacement');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function deleteAllPrixVerification()
@@ -1562,8 +1575,8 @@ class User extends CI_Controller
         $this->db->query('DELETE FROM projetlaposte.prixverification');
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1');
         
-        echo 1;
-        exit;
+        redirect(site_url("user/admin"), 'refresh');
+            return;
     }
     
     public function vuegeneration()
@@ -1589,10 +1602,38 @@ class User extends CI_Controller
         $db = $this->DataV2_model->loadDatabase($data_view['source']->url);
         $this->db->db_select('projetlaposte');
         
-        $this->db->query("CREATE OR REPLACE VIEW commande AS select `projetlaposte`.`prestataire`.`libelle` AS `Prestataire`,`projetlaposte`.`lot`.`numeroLot` AS `numeroLot`,substr(`projetlaposte`.`entite`.`codeRegate`,1,2) AS `Departement`,`projetlaposte`.`entite`.`codeRegate` AS `codeRegate`,`projetlaposte`.`entite`.`libelle` AS `Libellé_Entite`,`projetlaposte`.`balance`.`codeArticle` AS `codeArticle`,`projetlaposte`.`modele`.`libelle` AS `Libellé_Article`,`projetlaposte`.`balance`.`numeroSerie` AS `numeroSerie`,`projetlaposte`.`balance`.`codeActif` AS `codeActif`,`projetlaposte`.`balance`.`tranche` AS `tranche`,`projetlaposte`.`entite`.`adresse` AS `adresse`,`projetlaposte`.`entite`.`codePostal` AS `codePostal`,`projetlaposte`.`entite`.`ville` AS `ville`,`projetlaposte`.`entite`.`type` AS `type`,`projetlaposte`.`balance`.`dateVerification` AS `dateVerification`,month(`projetlaposte`.`balance`.`dateVerification`) AS `mois` from ((((`projetlaposte`.`prestataire` join `projetlaposte`.`lot` on(`projetlaposte`.`lot`.`id` = `projetlaposte`.`prestataire`.`idLot`)) join `projetlaposte`.`entite` on(`projetlaposte`.`entite`.`idPrestataire` = `projetlaposte`.`prestataire`.`id`)) join `projetlaposte`.`balance` on(`projetlaposte`.`balance`.`idEntite` = `projetlaposte`.`entite`.`id`)) join `projetlaposte`.`modele` on(`projetlaposte`.`modele`.`id` = `projetlaposte`.`balance`.`idModele`));");
         $this->db->query("CREATE OR REPLACE VIEW reporting_prestataire AS select `projetlaposte`.`prestataire`.`libelle` AS `Prestataire`,`projetlaposte`.`lot`.`numeroLot` AS `numeroLot`,substr(`projetlaposte`.`entite`.`codeRegate`,1,2) AS `Departement`,`projetlaposte`.`entite`.`codeRegate` AS `codeRegate`,`projetlaposte`.`entite`.`libelle` AS `Libelle_Entité`,`projetlaposte`.`balance`.`codeArticle` AS `codeArticle`,`projetlaposte`.`modele`.`libelle` AS `Libellé_Article`,`projetlaposte`.`balance`.`numeroSerie` AS `numeroSerie`,`projetlaposte`.`balance`.`codeActif` AS `codeActif`,`projetlaposte`.`balance`.`tranche` AS `tranche`,`projetlaposte`.`verification`.`statutVerification` AS `statutVerification`,`projetlaposte`.`entite`.`adresse` AS `adresse`,`projetlaposte`.`entite`.`type` AS `type`,`projetlaposte`.`balance`.`dateVerification` AS `Précédente_VP`,month(`projetlaposte`.`balance`.`dateVerification`) AS `Mois_Précédente_VP`,`projetlaposte`.`verification`.`dateVerification` AS `VP_Faite`,month(`projetlaposte`.`verification`.`dateVerification`) AS `Mois_VP_Faite`,`projetlaposte`.`verification`.`statutBalance` AS `statutBalance` from (((((`projetlaposte`.`prestataire` join `projetlaposte`.`lot` on(`projetlaposte`.`lot`.`id` = `projetlaposte`.`prestataire`.`idLot`)) join `projetlaposte`.`entite` on(`projetlaposte`.`entite`.`idLot` = `projetlaposte`.`lot`.`id`)) join `projetlaposte`.`balance` on(`projetlaposte`.`balance`.`idEntite` = `projetlaposte`.`entite`.`id`)) join `projetlaposte`.`modele` on(`projetlaposte`.`modele`.`id` = `projetlaposte`.`balance`.`idModele`)) join `projetlaposte`.`verification` on(`projetlaposte`.`verification`.`idBalance` = `projetlaposte`.`balance`.`id`));");
         $this->db->query("CREATE OR REPLACE VIEW test AS select case when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixverification`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCE 0-30KG') then `projetlaposte`.`prixverification`.`tranche0à30` when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixverification`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCE 31-200KG') then `projetlaposte`.`prixverification`.`tranche31à200` when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixverification`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCE 201-600KG') then `projetlaposte`.`prixverification`.`tranche201à600` when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixverification`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCES 601-1500KG') then `projetlaposte`.`prixverification`.`tranche601à1500` when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixverification`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCE SUPERIEURE A 1500 KG') then `projetlaposte`.`prixverification`.`tranche1501à3000` end AS `prixVerification`,case when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixdeplacement`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCE 0-30KG') then `projetlaposte`.`prixdeplacement`.`tranche0à30` when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixdeplacement`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCE 31-200KG') then `projetlaposte`.`prixdeplacement`.`tranche31à200` when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixdeplacement`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCE 201-600KG') then `projetlaposte`.`prixverification`.`tranche201à600` when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixdeplacement`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCES 601-1500KG') then `projetlaposte`.`prixdeplacement`.`tranche601à1500` when (substr(`projetlaposte`.`entite`.`codeRegate`,1,2) = `projetlaposte`.`prixdeplacement`.`numeroDepartement` and `projetlaposte`.`balance`.`tranche` = 'BALANCE SUPERIEURE A 1500 KG') then `projetlaposte`.`prixverification`.`tranche1501à3000` end AS `prixDeplacement`,`projetlaposte`.`prixverification`.`numeroDepartement` AS `numeroDepartement`,month(`projetlaposte`.`verification`.`dateVerification`) AS `mois`,`projetlaposte`.`prestataire`.`libelle` AS `Libellé_Prestataire`,`projetlaposte`.`lot`.`numeroLot` AS `numeroLot`,`projetlaposte`.`entite`.`codeRegate` AS `codeRegate`,`projetlaposte`.`balance`.`codeArticle` AS `codeArticle`,`projetlaposte`.`balance`.`tranche` AS `tranche`,`projetlaposte`.`modele`.`libelle` AS `Modele_Libellé`,`projetlaposte`.`verification`.`id` AS `idVerif` from (((((((`projetlaposte`.`prestataire` join `projetlaposte`.`prixverification` on(`projetlaposte`.`prestataire`.`id` = `projetlaposte`.`prixverification`.`idPrestataire`)) join `projetlaposte`.`lot` on(`projetlaposte`.`lot`.`id` = `projetlaposte`.`prestataire`.`idLot`)) join `projetlaposte`.`entite` on(`projetlaposte`.`entite`.`idPrestataire` = `projetlaposte`.`prestataire`.`id`)) join `projetlaposte`.`balance` on(`projetlaposte`.`balance`.`idEntite` = `projetlaposte`.`entite`.`id`)) join `projetlaposte`.`modele` on(`projetlaposte`.`modele`.`id` = `projetlaposte`.`balance`.`idModele`)) join `projetlaposte`.`prixdeplacement` on(`projetlaposte`.`prestataire`.`id` = `projetlaposte`.`prixdeplacement`.`idPrestataire`)) join `projetlaposte`.`verification` on(`projetlaposte`.`balance`.`id` = `projetlaposte`.`verification`.`idBalance`));");
         $this->db->query("CREATE OR REPLACE VIEW tarifverificationdeplacement As select `test`.`prixVerification` AS `prixVerification`,`test`.`prixDeplacement` AS `prixDeplacement`,`test`.`numeroDepartement` AS `numeroDepartement`,`test`.`mois` AS `mois`,`test`.`Libellé_Prestataire` AS `Libellé_Prestataire`,`test`.`numeroLot` AS `numeroLot`,`test`.`codeRegate` AS `codeRegate`,`test`.`codeArticle` AS `codeArticle`,`test`.`tranche` AS `tranche`,`test`.`Modele_Libellé` AS `Modele_Libellé`,`test`.`idVerif` AS `idVerif` from `projetlaposte`.`test` where `test`.`prixVerification` is not null and `test`.`prixDeplacement` is not null;");
+        echo "Vue créer";
+        redirect(site_url("user/admin"), 'refresh');
+        return;
+    }
+    
+    public function vuegenerationcommande(){
+        $this->load->helper('graph');
+        $this->load->model('Graphs_model');
+        $this->load->model('User_model');
+        $this->load->model('Database_model');
+        $this->load->model('Prestataire_model');
+        $this->load->model('Balances_model');
+        $this->load->model('DataV2_model');
+        $this->load->model('Entite_model');
+        
+        $email=$this->session->email;
+        $data_view['user'] = $this->User_model->getUserHalf($email);
+            
+        $config['source'] = $data_view['user']->actual_source;
+        $config['database'] = $data_view['user']->actual_database;
+        $config['table'] = $data_view['user']->actual_table;
+        
+        $data_view['source'] = $this->Database_model->getAuthorizedData($config['source'], $config['database'], $config['table']);
+        
+        $db = $this->DataV2_model->loadDatabase($data_view['source']->url);
+        $this->db->db_select('projetlaposte');
+        
+        $this->db->query("CREATE OR REPLACE VIEW commande AS select `projetlaposte`.`prestataire`.`libelle` AS `Prestataire`,`projetlaposte`.`lot`.`numeroLot` AS `numeroLot`,substr(`projetlaposte`.`entite`.`codeRegate`,1,2) AS `Departement`,`projetlaposte`.`entite`.`codeRegate` AS `codeRegate`,`projetlaposte`.`entite`.`libelle` AS `Libellé_Entite`,`projetlaposte`.`balance`.`codeArticle` AS `codeArticle`,`projetlaposte`.`modele`.`libelle` AS `Libellé_Article`,`projetlaposte`.`balance`.`numeroSerie` AS `numeroSerie`,`projetlaposte`.`balance`.`codeActif` AS `codeActif`,`projetlaposte`.`balance`.`tranche` AS `tranche`,`projetlaposte`.`entite`.`adresse` AS `adresse`,`projetlaposte`.`entite`.`codePostal` AS `codePostal`,`projetlaposte`.`entite`.`ville` AS `ville`,`projetlaposte`.`entite`.`type` AS `type`,`projetlaposte`.`balance`.`dateVerification` AS `dateVerification`,month(`projetlaposte`.`balance`.`dateVerification`) AS `mois` from ((((`projetlaposte`.`prestataire` join `projetlaposte`.`lot` on(`projetlaposte`.`lot`.`id` = `projetlaposte`.`prestataire`.`idLot`)) join `projetlaposte`.`entite` on(`projetlaposte`.`entite`.`idPrestataire` = `projetlaposte`.`prestataire`.`id`)) join `projetlaposte`.`balance` on(`projetlaposte`.`balance`.`idEntite` = `projetlaposte`.`entite`.`id`)) join `projetlaposte`.`modele` on(`projetlaposte`.`modele`.`id` = `projetlaposte`.`balance`.`idModele`));");
+        
         echo "Vue créer";
         redirect(site_url("user/admin"), 'refresh');
         return;

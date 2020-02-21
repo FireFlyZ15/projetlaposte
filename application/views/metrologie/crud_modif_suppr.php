@@ -13,17 +13,7 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
 </head>
 <body>
     <div class="row" id="resizableParent">
-        <div class="col-md-2 bg" id="resizableLeft">
-            <h4><?=EXPORT_CONSTRUCTION_TITLE?>
-                <a type="button" class="btn btn-link" target="_blank" href="<?php echo base_url('assets/pdf/Hadoop definition des données.pdf');?>" title="Définition des données">
-                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                </a>
-            </h4>
-            <a class="btn btn-primary btn-info"
-               onclick="showTable('<?= $config['source'] ?>','<?= $config['database'] ?>','<?= $config['table'] ?>');">Voir
-                les données</a><br>
-        </div>
-        <div class="col-md-10" id="resizableRight">
+        <div class="col-md-10" id="resizableRight" style="min-width: 100%;">
             <div class="row">
                 <div class="col-md-8">
                     <h3>
@@ -40,8 +30,7 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
             </div>
             <div id="data">
                 Données de la Table<br/>
-                <a class="editor_create btn btn-success create" id="create"><span class="glyphicon glyphicon-plus"></span>Créer une nouvelle données</a>
-                <?php?>
+                <?php ?>
                 <table id="datatable" class="display" style="width:100%">
                     <thead>
                         <tr>
@@ -51,15 +40,47 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
                                 foreach($array as $key){
                                     echo "<th>".$key."</th>";
                                 }
-                            ?>
-                            <th>Actions</th>
+                            if($user->actual_table == "verification"){
+                                ?>
+                            <th>Mise a jour</th>
+                            <th>Controle</th>
+                            <?php } ?>
+                            <th>Suppresions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                             $keys = array_keys(get_object_vars($test[0]));
                             $i = 0;
+                            if($user->actual_table == "verification"){
                             foreach($test as $data){
+                                echo "<tr id='".$data->id."'>";
+                                $id = "";
+                                foreach($keys as $key){
+                                    if($key == "statut"){
+                                        echo"<td><span class='edit' >".$data->$key."</span><select class='selectedit' id='statut' data-field='".$key."' data-id='".$data->id."'>";
+                                        foreach($statuts as $statut){ 
+                                            if($data->statut == $statut->statut){
+                                                echo "<option data-id='".$data->id."' data-field'".$key."' id='".$data->id."' selected>".$statut->statut."</option>";
+                                            }else{
+                                                echo "<option data-id='".$data->id."' data-field'".$key."' id='".$data->id."' >".$statut->statut."</option>";
+                                            }
+                                        }
+                                        echo "</select></td>";
+                                    }else{
+                                        echo "<td><span class='edit' name='".$key."'>".$data->$key."</span><input type='text' class='txtedit' data-id='".$data->id."' data-field='".$key."' id='".$data->id."' value='".$data->$key."'></td>";
+                                    }
+                                    if($key == "idBalance"){
+                                        echo "<p id='' hidden>".$data->$key."</p>";
+                                    }
+                                }
+                                echo "<td><a class='btn btn-success update' data-id='".$data->id."' id='idUpdate'><span class='glyphicon glyphicon-pencil'></a></td>";
+                                echo "<td><a class='btn btn-warning control' data-id='".$data->id."' id='idUpdate'><span class='glyphicon glyphicon-pencil'></a></td>";
+                                echo "<td><a class='btn btn-danger delete' data-id='".$data->id."' id='idDelete'><span class='glyphicon glyphicon-trash'></a></td>";
+                                echo "</tr>";
+                            }
+                            }else{
+                                foreach($test as $data){
                                 echo "<tr id='".$data->id."'>";
                                 $id = "";
                                 foreach($keys as $key){
@@ -76,9 +97,13 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
                                     }else{
                                         echo "<td><span class='edit' >".$data->$key."</span><input type='text' class='txtedit' data-id='".$data->id."' data-field='".$key."' id='".$data->id."' value='".$data->$key."'></td>";
                                     }
+                                    if($key == "idBalance"){
+                                        echo "<p id='' hidden>".$data->$key."</p>";
+                                    }
                                 }
                                 echo "<td><a class='btn btn-danger delete' data-id='".$data->id."' id='idDelete'><span class='glyphicon glyphicon-trash'></a></td>";
                                 echo "</tr>";
+                            }
                             }
                         ?>    
                     </tbody>
@@ -103,16 +128,16 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
     </div>
 </body>
 <script>
-    var editor;
     var base_url = "<?php echo base_url();?>";
     $(document).ready(function(e) {
-        $('#datatable tfoot th').each(function() {
+        $('#datatable thead th').each(function() {
            var title = $(this).text();
             $(this).html('<input type="text" placeholder="Search '+ title + '" />');
         });
         
         var table = $('#datatable').DataTable({
             scrollX: true,
+            deferLoading: 100,
             "aLengthMenu": [
                 [10, 25, 50, 75, -1],
                 [10, 25, 50, 75, "All"]
@@ -166,6 +191,8 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
            var edit_id = $(this).data('id');
             var fieldname = $(this).data('field');
             var value = $(this).val();
+            var val = $(this);
+            var oldvalue = val[0].attributes[5].value;
             
             //Hide Input element
             $(this).hide();
@@ -188,6 +215,8 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
                     console.log(response);
                 }
             });
+            }else{
+                $(this).prev('.edit').text(oldvalue);
             }
         });
         
@@ -196,7 +225,6 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
         var parentDom = document.getElementById($(this).data('id'));
         
         var Listdata = parentDom.getElementsByClassName("edit");
-        console.log(Listdata);
         var data;
         var i;
         for(i = 0; i < Listdata.length; i++){
@@ -210,6 +238,7 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
                 type: 'post',
                 data: {id: edit_id},
                 success: function(response){
+                    document.getElementById('datatable').deleteRow(parentDom.sectionRowIndex+1);
                     console.log(response);
                 },
                 fail: function(response){
@@ -219,20 +248,57 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
         }
         });
         
-        var affichageCreate = document.getElementById("create");
-        affichageCreate.onclick = function(){
-            var datacreate = document.getElementById('datacreate');
-            var title = document.getElementById('title');
-            title.style.background = "#c6c4c4";
-            title.style.marginTop = "0";
-            title.style.paddingBottom = "10px";
-            title.style.paddingTop = "10px";
-            datacreate.style.border = "solid";
-            if(datacreate.style.display == "block"){
-                datacreate.style.display = "none";
-            }else{
-                datacreate.style.display = "block";
-            }
+        //Control data
+        $('#datatable tbody').on("click",'.control', function() {
+            <?php if(isset($control)){foreach($control as $row){ ?>
+                var codeActif = '<?=$row->codeActif?>';
+                var codeRegate = '<?=$row->codeRegate?>';
+                if(codeActif == $(this).closest('tr').find('td:eq(6)').text()){
+                    if(codeRegate == $(this).closest('tr').find('td:eq(5)').text()){
+                        console.log(codeRegate);
+                        $(this).closest('tr').css('background-color',' green');
+                    }else{
+                        $(this).closest('tr').css('background-color',' orange');
+                    }
+                }
+            <?php }} ?>
+        });
+        
+        //Update data with button
+        $('#datatable tbody').on("click",'.update', function() {
+        var parentDom = document.getElementById($(this).data('id'));
+        
+        var Listdata = parentDom.getElementsByClassName("edit");
+            var codeActif = "";
+            var date = "";
+            var codeRegate = "";
+            var statutBalance = "";
+            $(Listdata).each(function() {
+                if($(this)[0].nextElementSibling.attributes[3].textContent == "codeActif"){
+                    codeActif = $(this)[0].textContent;
+                } else if($(this)[0].nextElementSibling.attributes[3].textContent == "dateVerification"){
+                    date = $(this)[0].textContent;          
+                }else if($(this)[0].nextElementSibling.attributes[3].textContent == "codeRegate"){
+                    codeRegate = $(this)[0].textContent;
+                }else if($(this)[0].nextElementSibling.attributes[3].textContent == "statutBalance"){
+                    statutBalance = $(this)[0].textContent;
+                }
+            });
+
+        if(confirm("Etes-vous sur de vouloir modifier les données de la balance :"+codeActif+" avec ces données : "+date+","+codeRegate+","+statutBalance+" ?")){
+            $.ajax({
+                url: '<?= base_url() ?>index.php/crud/update',
+                dataSrc: "data",
+                type: 'post',
+                data: {codeActif: codeActif, date: date, codeRegate: codeRegate, statutBalance: statutBalance},
+                success: function(response){
+                    console.log(response);
+                },
+                fail: function(response){
+                    console.log(response);
+                }
+            });
         }
+        });
     });
 </script>

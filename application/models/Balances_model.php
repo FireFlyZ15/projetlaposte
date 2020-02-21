@@ -86,8 +86,23 @@ class Balances_model extends CI_Model
         return $this->db->select("codeActif")->from($database.".".$table)->get()->result();
     }
     
+    public function getCodeRegate($db, $database, $table, $codeActif)
+    {
+        $this->db->select("codeRegate");
+        $this->db->from($database.".".$table);
+        $this->db->where('codeActif', $codeActif);
+        return $this->db->get()->result();
+    }
+    
     public function getHistorique($db, $database, $table)
     {
         return $this->db->select("*")->from($database.".".$table)->get()->result();
+    }
+    
+    public function getCodeRegateActif($db, $database, $table)
+    {
+        $this->db->select("codeRegate, codeActif");
+        $this->db->from($database.".".$table);
+        return $this->db->get()->result();
     }
 }

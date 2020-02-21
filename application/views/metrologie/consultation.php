@@ -35,19 +35,64 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
                     les données</a><br>
 
                 <label for="wording"><?=FIELD_LABEL?></label><br/>
+                <input type="button" onclick="selectAll()" value="Tous Selectionné">
+                <input type="button" onclick="UnSelectAll()" value="Tous Déselectionné"><br/>
                 <?php foreach ($resultColumn as $rowColumn): ?>
-                    <?php if ($rowColumn->type == "smallint" || $rowColumn->type == "int" || $rowColumn->type == "bigint" || $rowColumn->type == "double"): ?>
+                    <?php if ($rowColumn->name == "id" || $rowColumn->name == "idEntite" || $rowColumn->name == "idModele" || stripos($rowColumn->name, 'id') !== FALSE): ?>
+                    <?php continue; ?>
+                    <?php elseif ($rowColumn->type == "smallint" || $rowColumn->type == "int" || $rowColumn->type == "bigint" || $rowColumn->type == "double"): ?>
+                        <?php 
+                            $row = "";
+                            if($rowColumn->name == "tranche0à30"){
+                                $row = "Tranche de 0 à 30Kg";
+                            }else if($rowColumn->name == "tranche31à200"){
+                                $row = "Tranche de 31 à 200Kg";
+                            }else if($rowColumn->name == "tranche201à600"){
+                                $row = "Tranche de 201 à 600Kg";
+                            }else if($rowColumn->name == "tranche601à1500"){
+                                $row = "Tranche de 601 à 1500Kg";
+                            }else if($rowColumn->name == "tranche1501à3000"){
+                                $row = "Tranche de 1501 à 3000Kg";
+                            }else if($rowColumn->name == "tranche3001à6000"){
+                                $row = "Tranche de 3001 à 6000Kg";
+                            }else if($rowColumn->name == "tranche6001à10000"){
+                                $row = "Tranche de 6001 à 10000Kg";
+                            }else if($rowColumn->name == "numeroDepartement"){
+                                $row = "Numéro de Départements";
+                            }else if($rowColumn->name == "numeroLot"){
+                                $row = "Numéro de Lot";
+                            }else{
+                                $row = ucwords($rowColumn->name);
+                            }
+                        ?>
                         <input type="checkbox" id="<?=$rowColumn->name?>ID" name="champs[]" value="<?=$rowColumn->name?>">
-                        <label class="wordwrap_label" for="<?=$rowColumn->name?>ID"><?=$rowColumn->name?></label><br/>
+                        <label class="wordwrap_label" for="<?=$rowColumn->name?>ID"><?=$row?></label><br/>
                     <?php elseif ($rowColumn->type == "date"): ?>
                         <?php $i=0;?>
                         <?php foreach ($DateFormatFrList as $DateFormat): ?>
                             <?php if (in_array($rowColumn->name."::".$DateFormatList[$i], $config['champs'])): ?>
+                                <?php 
+                                    $row = "";
+                                    if($rowColumn->name == "dateVerification"){
+                                        $row = "Date de Vérification";
+                                    }
+                                ?>
                                 <input type="checkbox" id="<?=$rowColumn->name."::".$DateFormatList[$i]?>ID" name="champs[]" value="<?=$rowColumn->name."::".$DateFormatList[$i]?>" checked>
-                                <label class="wordwrap_label" for="<?=$rowColumn->name."::".$DateFormatList[$i]?>ID"><?= $rowColumn->name." - $DateFormat"?></label><br/>
+                                <label class="wordwrap_label" for="<?=$rowColumn->name."::".$DateFormatList[$i]?>ID"><?= $rowColumn->name." - Type $DateFormat"?></label><br/>
                             <?php else: ?>
+                                <?php
+                                $row = "";
+                                if($rowColumn->name == "dateVerification"){
+                                    $row = "Date de Vérification";
+                                }
+                                if($DateFormat == "Mois (1991-12)"){ ?>
                                 <input type="checkbox" id="<?=$rowColumn->name."::".$DateFormatList[$i]?>ID" name="champs[]" value="<?=$rowColumn->name."::".$DateFormatList[$i]?>">
-                                <label class="wordwrap_label" for="<?=$rowColumn->name."::".$DateFormatList[$i]?>ID"><?= $rowColumn->name." - $DateFormat"?></label><br/>
+                                <label class="wordwrap_label" for="<?=$rowColumn->name."::".$DateFormatList[$i]?>ID"><?= $row." - Type Année-$DateFormat"?></label><br/>
+                                <?php }elseif ($DateFormat == "Jour (1991-11-25)"){ ?>
+                                <input type="checkbox" id="<?=$rowColumn->name."::".$DateFormatList[$i]?>ID" name="champs[]" value="<?=$rowColumn->name."::".$DateFormatList[$i]?>">
+                                <label class="wordwrap_label" for="<?=$rowColumn->name."::".$DateFormatList[$i]?>ID"><?= $row." - Type Année-Mois-$DateFormat"?></label><br/>
+                                <?php }else{ ?>
+                                <?php } ?>
                             <?php endif; ?>
                             <?php $i++;?>
                         <?php endforeach; ?>
@@ -67,8 +112,30 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
                         <input type="checkbox" id="<?=$rowColumn->name?>ID" name="champs[]" value="<?=$rowColumn->name?>" checked>
                         <label class="wordwrap_label" for="<?=$rowColumn->name?>ID"><?=$rowColumn->name?></label><br/>
                     <?php else: ?>
+                        <?php 
+                            $row = "";
+                            if($rowColumn->name == "codeRegate"){
+                                $row = "Code Régate";
+                            }else if($rowColumn->name == "codeActif"){
+                                $row = "Code Actif";
+                            }else if($rowColumn->name == "codeArticle"){
+                                $row = "Code Article";
+                            }else if($rowColumn->name == "codeSource"){
+                                $row = "Code Source";
+                            }else if($rowColumn->name == "codePostal"){
+                                $row = "Code Postal";
+                            }else if($rowColumn->name == "numeroSerie"){
+                                $row = "Numéro de Série";
+                            }else if($rowColumn->name == "statutVerification"){
+                                $row = "Statut Vérification";
+                            }else if($rowColumn->name == "statutBalance"){
+                                $row = "Statut Balance";
+                            }else{
+                                $row = ucwords($rowColumn->name);
+                            }
+                        ?>
                         <input type="checkbox" id="<?=$rowColumn->name?>ID" name="champs[]" value="<?=$rowColumn->name?>">
-                        <label class="wordwrap_label" for="<?=$rowColumn->name?>ID"><?=$rowColumn->name?></label><br/>
+                        <label class="wordwrap_label" for="<?=$rowColumn->name?>ID"><?=$row?></label><br/>
                     <?php endif; ?>
                 <?php endforeach; ?>
                 <?=generate_form_calcul($config, $resultColumn)?>
@@ -81,7 +148,9 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
             <?php endif; ?>
             <button id="submit" type="submit" class="btn btn-primary form-control">Actualiser</button>
         </form>
+            <?php if($user->type == "admin" || $user->type == "createur"){ ?>
             <?=generate_save_graph_form($name,$description, $listGroup, $group,$config,$image_name,$public,$live,"table1D",$id)?>
+            <?php } ?>
     </div>
         <div id="resizableRight" class="col-md-10">
             <div class="row">
@@ -99,7 +168,7 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
                     <?php if($config['champs']!=[] || $config['request']!=""):?>
                         <!--<h4><a href="<?=site_url() . "/graph/export/".$id."?" . http_build_query($config, '', '&')?>">Export CSV</a></h4>-->
                         <div id="downloadurl" hidden></div>
-                    <?php endif;?>
+                    <?php endif; ?>
                 </div>
             </div>
             <div id="chargement" class="alert alert-info">
@@ -159,6 +228,7 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
     </div>
     <?=generate_modal("error_modal","Erreur")?>
 </body>
+<script type="text/javascript" charset="utf-8" src="<?=base_url()?>assets/js/jquery-3.4.1.min.js"></script>
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/jquery.min.js"></script>
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/jquery-ui.min.js"></script>
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/bootstrap.min.js"></script>
@@ -168,6 +238,7 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/formcheck.js"></script>
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/html2canvas.js"></script>
 <script type = 'text/javascript' src = "<?=base_url()?>assets/js/chosen.jquery.min.js"></script>
+<script type = 'text/javascript' src = "<?=base_url()?>assets/js/jquery.table2excel.js"></script>
 
 <script>
     resizableOn();
@@ -187,20 +258,19 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
     addFilterAuto(configJSON, configGraph['engine']);
 
          var url='<?=site_url()."/api/getDataRAW?".http_build_query($config, '', '&')?>';
-
+    console.log(data);
         jq.get(url, function(data) {
             if(data!="[]"){
                 dataVar = data;
                 datalist = JSON.parse(data);
                 createSpeedFilters(datalist,configGraph);
-                tableCreate1D(datalist,"","",0);
+                tableCreate1DReporting(datalist,"","",0);
                 if(datalist.length<5000){
                     getTableImg();
                 }
                 createSpeedFilterRangeTable1D(datalist);
                 document.getElementById('save_graph').disabled = false;
                 createDownloadCSVButton(datalist, "", "<?=$config['table'] . " " . $update_time_table?>");
-
             }else{
                 document.getElementById('chargement').className = "alert alert-warning";
                 document.getElementById('chargement').innerHTML = 'Aucune donnée disponible pour votre recherche';
@@ -227,7 +297,7 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
             }
             datalist = JSON.parse(data);
             document.getElementById('chargement-message').innerHTML = "Génération du tableau";
-            tableCreate1D(datalist,"","",0);
+            tableCreate1DReporting(datalist,"","",0);
         createSpeedFiltersFormAdd(datalist);
 
         if (datalist.length < 5000) {
@@ -242,4 +312,18 @@ $DateFormatList = json_decode(DATE_FORMAT_LIST);
         });
     <?php endif;?>
     var champs = <?=arrayPHPToJs($resultColumn);?>;
+    function selectAll() {
+        var items = document.getElementsByName('champs[]');
+        for(var i = 0; i<items.length; i++){
+            if(items[i].type == 'checkbox')
+                items[i].checked=true;
+        }
+    }
+    function UnSelectAll() {
+        var items = document.getElementsByName('champs[]');
+        for(var i = 0; i<items.length; i++){
+            if(items[i].type == 'checkbox')
+                items[i].checked=false;
+        }
+    }
 </script>

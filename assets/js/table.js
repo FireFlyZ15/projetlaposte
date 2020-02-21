@@ -657,6 +657,420 @@ function tableCreate1D(datalist, sorting_colomn, sorting_type, page = -1, id="ta
     }
 }
 
+function tableCreate1DReporting(datalist, sorting_colomn, sorting_type, page = -1, id="table", speed_filter_flag=true, mode_sample=false) {
+    var slider_mode = false;
+    //Prise en compte de l'intervalle
+    if (!mode_sample && document.getElementById("slider-range")) {
+        slider_mode = true;
+        var min = document.getElementById("min_input").value;
+        var max = document.getElementById("max_input").value;
+        console.log(min + "-" + max);
+    }
+    //Copie la liste pour garder la version sans triage
+    var data = datalist.slice();
+    var nb_line = data.length;
+    var tbl = document.getElementById(id);
+    tbl.innerHTML = '';
+    if (!mode_sample) {
+        if (data.length == 0) {
+            document.getElementById('chargement').className = "alert alert-warning";
+            document.getElementById('chargement-message').innerHTML = 'Aucune donnée disponible pour votre recherche';
+            document.getElementById('loader-img').style.display = 'none';
+            document.getElementById('chargement').style.display = 'block';
+            //Affichage des statistiques sur le tableau
+            if (document.getElementById('nb_line') != null && document.getElementById('nb_line_show') != null && document.getElementById('nb_column') != null) {
+                document.getElementById('nb_line').innerHTML = 0;
+                document.getElementById('nb_line_show').innerHTML = 0;
+                document.getElementById('nb_column').innerHTML = 0;
+            }
+            return;
+        } else {
+            document.getElementById('chargement-message').innerHTML = "Génération du tableau";
+            document.getElementById('chargement').className = "alert alert-info";
+            document.getElementById('chargement').style.display = 'block';
+        }
+    } else {
+        if (data.length == 0) {
+            document.getElementById(id).innerHTML = "<div class='alert alert-warning'>Aucune donnée disponible!</div>";
+        }
+    }
+
+    var nb_column = Object.keys(data[0]).length;
+    var colomns_hide = [];
+    var speedfilters = [];
+    values_show = [];
+    var filter_mode = true;
+    if (!speed_filter_flag || configGraph === undefined || (configGraph.expertmode && configGraph.speedfilters !== undefined && configGraph.speedfilters.length == 0) || configGraph.speedfilters === undefined) {
+
+    }else{
+        jq=jQuery.noConflict();
+        speedfilters = configGraph.speedfilters;
+        configGraph.speedfilters.forEach(function(f){
+            if (!configGraph.expertmode && !configGraph.champs.includes(f)) {
+                console.log("ajout liste hide " + f);
+                console.log(configGraph.expertmode);
+                colomns_hide.push(f);
+            }
+            values = [];
+            var ids = f.split("::");
+            var id = ids[0];
+            if(ids.length>1){
+                id +=ids[1];
+            }
+            jq("#"+id+"_select :selected").each(function(){
+                values.push(jq(this).val());
+                filter_mode = true;
+            });
+
+            values_show[f] = values;
+        });
+    }
+    var thead = document.createElement('thead');
+    var tbdy = document.createElement('tbody');
+    tbdy.className = "table-overflow";
+    //La classe des celules total du tableau
+    var classTotal = "info"
+    var tr = document.createElement('tr');
+
+    var arrayLib = [];
+    //Génération de l'entête du tableau
+    Object.keys(data[0]).forEach(function(l){
+        if(!colomns_hide.includes(l)){
+            arrayLib.push(l);
+            var th2 = document.createElement('th');
+            if(l == "dateVerification::DATE" || l == "dateVerification::YEARMONTH"){
+                l = "Date de verification";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == "statut"){
+                l = "Statut Balance";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == "tranche"){
+                l = "Tranche Balance";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == 'codeRegate'){
+                l = "Code Régate Entité";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == 'codePostal'){
+                l = "Code Postal Entité";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == 'codeSource'){
+                l = "Code Source Entité";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == 'numeroSerie'){
+                l = "Numéro de Série";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == 'codeArticle'){
+                l = "Code Article";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == 'numeroLot'){
+                l = "Numéro de Lot";
+                th2.appendChild(document.createTextNode(l));
+            }else if(l == 'codeActif'){
+                l = "Code Actif";
+                th2.appendChild(document.createTextNode(l));
+            }else{
+                th2.appendChild(document.createTextNode(l));
+            }
+                
+            //Ajout du bouton de tri par ordre croissant/alphabetique
+            var button_image_desc = document.createElement('span');
+            button_image_desc.className = "glyphicon glyphicon-chevron-up";
+            var button_desc = document.createElement('button');
+            button_desc.id = "button_sort_"+l+"_desc";
+            button_desc.className = "btn btn-default btn-xs right-float";
+            button_desc.appendChild(button_image_desc);
+            button_desc.onclick = function () {
+                if(sorting_colomn==l && sorting_type=="desc"){
+
+                    tableCreate1D(datalist,'','',page,id,speed_filter_flag, true);
+                    //document.getElementById("button_sort_"+l+"_desc").className = "btn btn-default btn-xs right-float";
+                }else{
+                    tableCreate1D(datalist,l,'desc',page,id,speed_filter_flag, true);
+                    //document.getElementById("button_sort_"+l+"_desc").className = "btn btn-success btn-xs right-float";
+                }
+            };
+            th2.appendChild(button_desc);
+            var button_image_asc = document.createElement('span');
+            button_image_asc.className = "glyphicon glyphicon-chevron-down";
+
+            //Ajout du bouton de tri par ordre decroissant/dealphabetique
+            var button_asc = document.createElement('button');
+            button_asc.id = "button_sort_"+l+"_asc";
+            button_asc.className = "btn btn-default btn-xs right-float";
+            button_asc.appendChild(button_image_asc);
+            button_asc.onclick = function () {
+                if(sorting_colomn==l && sorting_type=="asc"){
+                    tableCreate1D(datalist,'','',page,id,speed_filter_flag, true);
+                }else{
+                    tableCreate1D(datalist,l,'asc',page,id,speed_filter_flag, true);
+                }
+            };
+            th2.appendChild(button_asc);
+            tr.appendChild(th2);
+        }
+
+    });
+
+    if (!mode_sample && !configGraph.expertmode && speed_filter_flag) {
+        //Ajout d'une colonne info
+        var th2 = document.createElement('th');
+        th2.appendChild(document.createTextNode("info"));
+        tr.appendChild(th2);
+    }
+
+    thead.appendChild(tr);
+    tbl.appendChild(thead);
+
+    if(page!=-1){
+        var nbmin = page*10000;
+        var nbmax = nbmin+10000;
+    }else{
+        var nbmin = 0;
+        var nbmax = Number.MAX_SAFE_INTEGER;
+    }
+    var nb = 0;
+    var newdata = [];
+    //console.log(newdata);
+    //Filtrage et rassemblement des valeurs pour prendre en compte les filtres rapide
+    data.forEach(function (o) {
+        var valid = true;
+        //Verifie si le mode filtrage rapide est activé
+        if(filter_mode){
+            Object.keys(o).forEach(function(k){
+                if(speedfilters.includes(k) && values_show[k].length!=0){
+                    if(o[k]==null){
+                        o[k]="NULL";
+                    }else if(o[k]==""){
+                        o[k]="VIDE";
+                    }
+                    if(values_show[k].includes(o[k])){
+                        valid = valid && true;
+                    }else{
+                        valid = valid && false;
+                    }
+                }
+            });
+        }
+        if(!filter_mode || valid) {
+            var key = "";
+            var keyvalue = "";
+            arrayLib.forEach(function (t) {
+                if (t.indexOf("SUM(") !== -1 || t.indexOf("COUNT(") !== -1 || t.indexOf("sum(") !== -1 || t.indexOf("count(") !== -1) {
+                    keyvalue = t;
+                }else{
+                    key += o[t]+";";
+                }
+
+            });
+            if(newdata[key]!=null){
+               newdata[key][keyvalue] = Number(o[keyvalue]) + Number(newdata[key][keyvalue]);
+            }else{
+                newdata[key] = JSON.parse(JSON.stringify(o));
+            }
+        }
+
+
+    });
+    var data = [];
+    var nbShow = 0;
+    var calc = configGraph.typecalcul.toLowerCase() + "(" + configGraph.typecalculchamp + ")";
+
+    for (var o in newdata){
+        var value = parseInt(newdata[o][calc]);
+        if (!slider_mode || (value >= min && value <= max)) {
+            nbShow++;
+            data.push(newdata[o]);
+        }
+    }
+    if (document.getElementById('number_result')) {
+        document.getElementById('number_result').innerText = nbShow;
+    }
+    if (!mode_sample && nbShow == 0) {
+        document.getElementById('chargement').className = "alert alert-warning";
+        document.getElementById('chargement-message').innerHTML = 'Aucune donnée disponible pour votre recherche';
+        document.getElementById('loader-img').style.display = 'none';
+        document.getElementById('chargement').style.display = 'block';
+        //Affichage des statistiques sur le tableau
+        if (document.getElementById('nb_line') != null && document.getElementById('nb_line_show') != null && document.getElementById('nb_column') != null) {
+            document.getElementById('nb_line').innerHTML = nb_line;
+            document.getElementById('nb_line_show').innerHTML = 0;
+            document.getElementById('nb_column').innerHTML = nb_column;
+        }
+        tbl.innerHTML = '';
+        document.getElementById("pagination").innerHTML = "";
+        return;
+    }
+    //Tri les données celon la preference de l'utilisateur
+    if(sorting_type=="desc"){
+        if (sorting_colomn.indexOf("SUM(") !== -1 || sorting_colomn.indexOf("COUNT(") !== -1 || sorting_colomn.indexOf("sum(") !== -1 || sorting_colomn.indexOf("count(") !== -1) {
+            data.sort(function(a, b) {
+                return (parseInt(a[sorting_colomn], 10) - parseInt(b[sorting_colomn], 10));
+            });
+        }else if (sorting_colomn.indexOf("AVG(") !== -1 || sorting_colomn.indexOf("avg(") !== -1) {
+            data.sort(function(a, b) {
+                return (parseFloat(a[sorting_colomn],10) - parseFloat(b[sorting_colomn],10));
+            });
+        }else {
+            data.sort(function(a, b) {
+                if(a[sorting_colomn]=== b[sorting_colomn]){
+                    return 0;
+                }else if(a[sorting_colomn]===null){
+                    return 1;
+                }else if(b[sorting_colomn]===null){
+                    return -1;
+                }else{
+                    return ((a[sorting_colomn] < b[sorting_colomn]) ? -1 : 1);
+                }
+
+            });
+        }
+    }else if (sorting_type=="asc"){
+
+        if (sorting_colomn.indexOf("SUM(") !== -1 || sorting_colomn.indexOf("sum(") !== -1 || sorting_colomn.indexOf("COUNT(") !== -1 || sorting_colomn.indexOf("count(") !== -1) {
+            data.sort(function(a, b) {
+                return (parseInt(b[sorting_colomn], 10) - parseInt(a[sorting_colomn], 10));
+            });
+        }else if (sorting_colomn.indexOf("AVG(") !== -1 || sorting_colomn.indexOf("avg(") !== -1) {
+            data.sort(function(a, b) {
+                return (parseFloat(b[sorting_colomn], 10) - parseFloat(a[sorting_colomn], 10));
+            });
+        } else {
+            data.sort(function(a, b) {
+                if(a[sorting_colomn]===b[sorting_colomn]){
+                    return 0;
+                }else if(a[sorting_colomn]===null){
+                    return -1;
+                }else if(b[sorting_colomn]===null){
+                    return 1;
+                }else{
+                    return ((b[sorting_colomn] < a[sorting_colomn]) ? -1 : 1);
+                }
+
+            });
+        }
+    }
+    var nb_line_show = 0;
+    data.forEach(function (o) {
+        if(nb>=nbmin && nb<nbmax){
+            nb_line_show++;
+            var tr = document.createElement('tr');
+            var nbFocus=-1;
+            var config = [];
+            //Ajout des données dans le tableau
+            arrayLib.forEach(function (t) {
+                var td = document.createElement('td');
+                if (t.indexOf("AVG(") !== -1 || t.indexOf("avg(") !== -1) {
+                    td.appendChild(document.createTextNode(Intl.NumberFormat().format(o[t])));
+                } else if (t.indexOf("SUM(") !== -1 || t.indexOf("COUNT(") !== -1 || t.indexOf("sum(") !== -1 || t.indexOf("count(") !== -1) {
+                    td.appendChild(document.createTextNode(Intl.NumberFormat().format(o[t])));
+                    nbFocus=o[t];
+                }else{
+                    if(o[t]==null){
+                        o[t]="NULL";
+                    }else if(o[t]==""){
+                        o[t]="VIDE";
+                    }
+                    config[t]=o[t];
+
+                    td.appendChild(document.createTextNode(o[t]));
+                }
+
+                tr.appendChild(td);
+            });
+
+
+            if (!mode_sample && !configGraph.expertmode && speed_filter_flag) {
+                var td = document.createElement('td');
+                var a = document.createElement("a");
+                a.className="btn btn-default btn-xs";
+                a.innerHTML = "exemple";
+                //console.log(config);
+
+                a.onclick = function () {
+                    showLotForTable(config,configGraph,nbFocus,false);
+                    return false;
+                };
+                td.appendChild(a);
+
+                tr.appendChild(td);
+            }
+
+
+            tbdy.appendChild(tr);
+        }
+        nb++;
+    });
+    var nbpage_max = Math.ceil(nb/10000);
+    tbl.appendChild(tbdy);
+    if(sorting_colomn!='' && sorting_type!=''){
+        document.getElementById("button_sort_"+sorting_colomn+"_"+sorting_type).className = "btn btn-success btn-xs right-float";
+    }
+
+    if(nbpage_max>1){
+        //Generation des paginations
+        var ul_pagination = document.getElementById("pagination");
+        ul_pagination.innerHTML="";
+        var li_pagination = document.createElement('li');
+        var a_pagination = document.createElement('a');
+        a_pagination.innerHTML  = "<span aria-hidden=\"true\">«</span>";
+        if(page>0){
+            a_pagination.setAttribute("onclick", "tableCreate1D(datalist,'" + sorting_colomn + "','" + sorting_type + "'," + (page - 1) + ",'" + id + "'," + speed_filter_flag + ");return false;");
+            a_pagination.href="";
+        }
+        li_pagination.appendChild(a_pagination);
+        ul_pagination.appendChild(li_pagination);
+
+        for (var nb_page=0;nb_page<nbpage_max;nb_page++){
+            var li_pagination = document.createElement('li');
+            var a_pagination = document.createElement('a');
+            a_pagination.innerHTML  = nb_page+1;
+            if(nb_page==page){
+                li_pagination.className = "active";
+            }else{
+                a_pagination.setAttribute("onclick", "tableCreate1D(datalist,'" + sorting_colomn + "','" + sorting_type + "'," + nb_page + ",'" + id + "'," + speed_filter_flag + ");return false;");
+                a_pagination.href="";
+            }
+            li_pagination.appendChild(a_pagination);
+            ul_pagination.appendChild(li_pagination);
+        }
+
+
+        var li_pagination = document.createElement('li');
+        var a_pagination = document.createElement('a');
+        a_pagination.innerHTML  = "<span aria-hidden=\"true\">»</span>";
+        if(page+1<nbpage_max){
+            var new_page = page+1;
+            a_pagination.setAttribute("onclick", "tableCreate1D(datalist,'" + sorting_colomn + "','" + sorting_type + "'," + new_page + ",'" + id + "'," + speed_filter_flag + ");return false;");
+            a_pagination.href="";
+        }
+        li_pagination.appendChild(a_pagination);
+        ul_pagination.appendChild(li_pagination);
+    }else{
+        if(document.getElementById("pagination")){
+            document.getElementById("pagination").innerHTML="";
+        }
+
+    }
+    /*for (var i = 0; i < pagination.length; i++) {
+        pagination[i].disabled = false;
+    }*/
+    if (!mode_sample) {
+        document.getElementById('chargement-message').innerHTML = "";
+        document.getElementById('chargement').className = "";
+        document.getElementById('chargement').style.display = 'none';
+        if (document.getElementById('loader-img')) {
+            document.getElementById('loader-img').style.display = 'none';
+        }
+
+        //Affichage des statistiques sur le tableau
+        if (document.getElementById('nb_line') != null && document.getElementById('nb_line_show') != null && document.getElementById('nb_column') != null) {
+            document.getElementById('nb_line').innerHTML = nb_line;
+            document.getElementById('nb_line_show').innerHTML = nb_line_show;
+            document.getElementById('nb_column').innerHTML = nb_column;
+        }
+    }
+}
+
 
 /**
  * Créé un canvas à partir d'une table HTML

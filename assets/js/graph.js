@@ -1,4 +1,4 @@
-var base_url = "http://10.0.2.15:360/360/";
+var base_url = "http://150.60.40.88:360/360/";
 var site_url = base_url+"index.php/";
 
 /**
@@ -563,7 +563,7 @@ function convertJSONtoCSV(json) {
 function convertJSONtoEXCEL(json) 
 {    
     //Convertie en json si c'est une chaine de caractère
-    if (typeof json === 'string') {
+    if (typeof json === 'string' || typeof json === 'number') {
         json = JSON.parse(json);
     }
     excel="";
@@ -608,19 +608,18 @@ function createDownloadCSVButton(data,overwriteFirstLine,filename="data"){
         return;
     }
     var csv = convertJSONtoCSV(data);
+    console.log(csv);
     if(overwriteFirstLine!=""){
         csv = overwriteFirstLine+"\n"+csv.substring(csv.indexOf('\n')+1);
     }
     var element = document.createElement('a');
-    csvData = new Blob([csv], { type: 'text/csv' });
+    var csvData = new Blob([csv], { type: 'application/vnd.ms-excel;charset=utf-8' });
     element.setAttribute('href', URL.createObjectURL(csvData));
     element.setAttribute('download', filename+".csv");
-    element.innerHTML="Téléchargement du CSV";
+    element.innerHTML="Téléchargement de l'EXCEL";
     element.className="btn btn-primary";
     document.getElementById('downloadurl').appendChild(element);
     document.getElementById('downloadurl').hidden = false;
-
-
 }
 
 /**
@@ -655,7 +654,7 @@ function createDownloadCSVButtonForChartJs(typeChart,overwriteFirstLine,filename
     csvData = new Blob([csv], { type: 'text/csv' });
     element.setAttribute('href', URL.createObjectURL(csvData));
     element.setAttribute('download', filename+".csv");
-    element.innerHTML="Téléchargement du CSV";
+    element.innerHTML="Téléchargement de l'EXCEL";
     element.className="btn btn-primary";
     document.getElementById('downloadurl').appendChild(element);
     document.getElementById('downloadurl').hidden = false;

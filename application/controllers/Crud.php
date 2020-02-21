@@ -162,6 +162,16 @@ class Crud extends CI_Controller {
             foreach($reqCodeActif as $code){
                 if($rowData[6] == $code->codeActif){
                     fwrite($fileLog, date("Y-m-d H:i:s")+': La balance avec le code actif ' +$rowData[6]+ " n'a pas été ajouter car la balance est déja présente dans la base de données\r\n");
+                    $reqCodeRegate = $this->Balances_model->getCodeRegate($db, $database, $balance, $rowData[6]);
+                    foreach($reqCodeRegate as $data){
+                        if($data->codeRegate != $rowData[4]){
+                            $this->db->query('UPDATE balance SET codeReagte ='+$data->codeRegate+' WHERE codeActif = ' +rowData[6]+' ;');
+                            $idEntite = $this->Balances_model->getIdEntite($db, $database, "entite", $dat->codeRegatea);
+                            foreach($idEntite as $row){
+                                $this->db->query('UPDATE balance SET idEntite ='+$row->id+' WHERE codeActif = ' +rowData[6]+' ;');
+                            }
+                        }
+                    }
                     $continue = 1;
                 }
             }
@@ -195,6 +205,7 @@ class Crud extends CI_Controller {
             
             if($rowData[4] == "ALIENATION"){
                 fwrite($fileLog, date("Y-m-d H:i:s")+': La balance avec le code article ' +$rowData[7]+ " n'a pas été ajouter car la balance est aliéné\r\n");
+                $this->db->query("DELETE balance FROM balance WHERE codeActif = "+$rowData[6]+" ;"); 
                 continue;
             }
             
@@ -611,6 +622,9 @@ class Crud extends CI_Controller {
             $data_view["utilisations"] = $this->Balances_model->getAllUtilisation($db, $data_view['source']->database, "balance");
             $data_view["tranches"] = $this->Balances_model->getAllTranche($db, $data_view['source']->database, "balance");
         }
+        if($data_view['source']->table == 'verification'){
+            $data_view['control'] = $this->Balances_model->getCodeRegateActif($db, $data_view['source']->database, "balance");
+        }
         $data_view['titre'] = "Ajout/Modification/Suppression des données de la BDD (source utilisée : " . $data_view['source']->name . ", base de donnée utilisée : " . $config['database'] . ", table utilisée : " . $config['table'] . ", moteur : " . $data_view['source']->engine . ")";
         $data_view['type'] = "crud";
         $this->load->view('template_header', $data_view);
@@ -662,6 +676,30 @@ class Crud extends CI_Controller {
         
         echo 1;
         exit;
+    }
+    
+    public function control(){
+        $this->load->model('DataV2_model');
+        $this->load->model('Database_model');
+        $this->load->model('User_model');
+        $this->load->model('Crud_model');
+        $this->load->model('Entite_model');
+        $this->load->model('Balances_model');
+        
+        $email = $this->session->email;
+        $data_view['user'] = $this->User_model->getUserHalf($email);
+        $config['source'] = $data_view['user']->actual_source;
+        $config['database'] = $data_view['user']->actual_database;
+        $config['table'] = $data_view['user']->actual_table;
+        $data_view['source'] = $this->Database_model->getAuthorizedData($config['source'], $config['database'], $config['table']);
+        $db = $data_view['source']->database;
+        $table = $data_view['source']->table;
+        
+
+        $codeActif = $this->input->post('codeActif');
+        $code = $this->Balances_model->getCodeRegate($db, $data_view['user']->actual_database, "balance", $codeActif);
+        var_dump($code[0]->codeRegate);
+        return json_encode($code);
     }
     
     public function delete(){
